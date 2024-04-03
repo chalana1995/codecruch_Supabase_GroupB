@@ -34,3 +34,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+CREATE TABLE Projects (
+    id SERIAL PRIMARY KEY,
+    ProjectName VARCHAR(255) NOT NULL,
+    start_date DATE
+);
+
+ALTER TABLE Projects ENABLE ROW LEVEL SECURITY;
+ 
+CREATE policy "Users can create projects." ON Projects FOR
+  INSERT WITH CHECK (auth.uid() = user_id);
+ 
+CREATE policy "Users can update their own projects." ON Projects FOR
+  UPDATE USING (auth.uid() = user_id);
+ 
+CREATE policy "Users can delete their own projects." ON Projects FOR
+  DELETE USING (auth.uid() = user_id);
+ 
+CREATE policy "project are public" ON Projects FOR
